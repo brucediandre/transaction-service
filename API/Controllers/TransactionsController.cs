@@ -15,18 +15,19 @@ namespace API.Controllers
             _transactionService = transactionService;
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet][HttpGet]
+        public async Task<IActionResult> Get()
         {
-            var transactions = _transactionService.GetAll();
+            var transactions = await _transactionService.GetAll();
             return Ok(transactions);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Transaction transaction)
+        public async Task<IActionResult> Post([FromBody] Transaction transaction)
         {
-            _transactionService.Create(transaction);
+            await _transactionService.Create(transaction);
             return CreatedAtAction(nameof(Get), new { id = transaction.Id }, transaction);
         }
+
     }
 }

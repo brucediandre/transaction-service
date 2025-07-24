@@ -1,23 +1,27 @@
-using Domain.Entities;
 using Application.Interfaces;
+using Domain.Entities;
 
 namespace Application.Services
 {
     public class TransactionService : ITransactionService
     {
-        private readonly List<Transaction> _transactions = new(); // Temporário (mock)
+        private readonly ITransactionRepository _repository;
 
-        public IEnumerable<Transaction> GetAll()
+        public TransactionService(ITransactionRepository repository)
         {
-            return _transactions;
+            _repository = repository;
         }
 
-        public void Create(Transaction transaction)
+        public async Task<IEnumerable<Transaction>> GetAllAsync()
+        {
+            return await _repository.GetAllAsync();
+        }
+
+        public async Task CreateAsync(Transaction transaction)
         {
             transaction.Id = Guid.NewGuid().ToString();
             transaction.CreatedAt = DateTime.UtcNow;
-            _transactions.Add(transaction);
+            await _repository.CreateAsync(transaction);
         }
     }
 }
-//simulando o armazenamento
